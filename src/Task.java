@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Task {
     private String title;
     private String description;
@@ -43,9 +41,4 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
-
-    public String getType() {
-        return "Task";
-    }
-
 }

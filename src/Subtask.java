@@ -1,4 +1,3 @@
-
 public class Subtask extends Task {
     private int parentEpic;
 
@@ -10,9 +9,4 @@ public class Subtask extends Task {
     public int getParentEpic() {
         return parentEpic;
     }
-
-    public String getType() {
-        return "Subtask";
-    }
-
 }
