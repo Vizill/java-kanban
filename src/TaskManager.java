@@ -100,7 +100,6 @@ public class TaskManager {
         }
     }
 
-
     public void addSubtask(Subtask subtask) {
         subtask.setId(getNextId());
         subtaskHash.put(subtask.getId(), subtask);
