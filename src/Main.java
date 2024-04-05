@@ -50,9 +50,10 @@ public class Main {
         subtask3.setStatus(TaskStatus.DONE);
         subtask4.setStatus(TaskStatus.DONE);
 
-        taskManager.updateTask(task1);
-        taskManager.updateEpicStatus(3);
-        taskManager.updateEpicStatus(4);
+        taskManager.updateSubtask(subtask1);
+        taskManager.updateSubtask(subtask2);
+        taskManager.updateSubtask(subtask3);
+        taskManager.updateSubtask(subtask4);
 
         System.out.println("\nОбновленные статусы:");
         System.out.println("Статус задачи 1: " + task1.getStatus());
@@ -63,8 +64,13 @@ public class Main {
         System.out.println("Статус эпика 1: " + epic1.getStatus());
         System.out.println("Статус эпика 2: " + epic2.getStatus());
 
+        System.out.println(taskManager.getAllSubtasks());
+
         taskManager.deleteTask(task1.getId());
         taskManager.deleteEpic(epic2.getId());
+
+        System.out.println(taskManager.getAllEpics());
+        System.out.println(taskManager.getAllSubtasks());
 
         System.out.println("\nСписок задач после удаления:");
         for (Task task : taskManager.getAllTasks()) {

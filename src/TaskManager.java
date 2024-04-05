@@ -94,6 +94,15 @@ public class TaskManager {
     public void deleteEpic(int epicId) {
         Epic epic = epicHash.remove(epicId);
         if (epic != null) {
+            ArrayList<Subtask> subtasksToRemove = new ArrayList<>();
+            for (Subtask subtask : subtaskHash.values()) {
+                if (subtask.getParentEpic() == epicId) {
+                    subtasksToRemove.add(subtask);
+                }
+            }
+            for (Subtask subtask : subtasksToRemove) {
+                deleteSubtask(subtask.getId());
+            }
             System.out.println("Эпик " + epic.getTitle() + " успешно удален.");
         } else {
             System.out.println("Эпик с ID " + epicId + " не найден.");
@@ -156,7 +165,7 @@ public class TaskManager {
         }
     }
 
-    public void updateEpicStatus(int epicId) {
+    private void updateEpicStatus(int epicId) {
         Epic epic = epicHash.get(epicId);
         if (epic != null) {
             calculateEpicStatus(epic);
@@ -165,33 +174,45 @@ public class TaskManager {
         }
     }
 
-    public void calculateEpicStatus(Epic epic) {
+    private void calculateEpicStatus(Epic epic) {
         ArrayList<Subtask> subtasks = getAllSubtasksOfEpic(epic.getId());
+        boolean allDone = true;
         if (subtasks.isEmpty()) {
             epic.setStatus(TaskStatus.NEW);
             return;
         }
-        boolean allDone = true;
-        boolean allInProgress = false;
         for (Subtask subtask : subtasks) {
-            if (subtask.getStatus() == TaskStatus.NEW) {
+            if (subtask.getStatus() == TaskStatus.IN_PROGRESS) {
+                epic.setStatus(TaskStatus.IN_PROGRESS);
+                return;
+            }
+        }
+        for (Subtask subtask : subtasks) {
+            if (subtask.getStatus() != TaskStatus.DONE) {
                 allDone = false;
-            } else if (subtask.getStatus() == TaskStatus.IN_PROGRESS) {
-                allDone = false;
-                allInProgress = true;
                 break;
             }
         }
-        if (allInProgress) {
-            epic.setStatus(TaskStatus.IN_PROGRESS);
-        } else if (allDone) {
+        if (allDone) {
             epic.setStatus(TaskStatus.DONE);
         } else {
             epic.setStatus(TaskStatus.NEW);
         }
     }
 
-    public int getNextId() {
+    private int getNextId() {
         return idCount++;
+    }
+
+    public void deleteAllTasks() {
+        taskHash.clear();
+    }
+
+    public void deleteAllEpics() {
+        epicHash.clear();
+    }
+
+    public void deleteAllSubtasks() {
+        subtaskHash.clear();
     }
 }
