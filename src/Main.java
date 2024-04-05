@@ -16,10 +16,10 @@ public class Main {
         taskManager.addEpic(epic2);
 
 
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", 1);
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", 1);
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", 2);
-        Subtask subtask4 = new Subtask("Подзадача 4", "Описание подзадачи 4", 2);
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", 3);
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", 3);
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", 4);
+        Subtask subtask4 = new Subtask("Подзадача 4", "Описание подзадачи 4", 4);
 
         taskManager.addSubtask(subtask1);
         taskManager.addSubtask(subtask2);
@@ -39,7 +39,7 @@ public class Main {
             System.out.println(subtask.getTitle() + ": " + subtask.getStatus());
         }
 
-        taskManager.getEpicById(1);
+        taskManager.getEpicById(4);
 
         taskManager.deleteTask(5);
 
@@ -50,23 +50,22 @@ public class Main {
         subtask3.setStatus(TaskStatus.DONE);
         subtask4.setStatus(TaskStatus.DONE);
 
-        taskManager.updateEpicStatus(epic1);
-        taskManager.updateEpicStatus(epic2);
-
         taskManager.updateTask(task1);
+        taskManager.updateEpicStatus(3);
+        taskManager.updateEpicStatus(4);
 
         System.out.println("\nОбновленные статусы:");
         System.out.println("Статус задачи 1: " + task1.getStatus());
+        System.out.println("Статус подзадачи 1: " + subtask1.getStatus());
+        System.out.println("Статус подзадачи 2: " + subtask2.getStatus());
         System.out.println("Статус подзадачи 3: " + subtask3.getStatus());
         System.out.println("Статус подзадачи 4: " + subtask4.getStatus());
         System.out.println("Статус эпика 1: " + epic1.getStatus());
         System.out.println("Статус эпика 2: " + epic2.getStatus());
 
-        // Попробуем удалить одну из задач и один из эпиков
         taskManager.deleteTask(task1.getId());
         taskManager.deleteEpic(epic2.getId());
 
-        // Печатаем списки после удаления
         System.out.println("\nСписок задач после удаления:");
         for (Task task : taskManager.getAllTasks()) {
             System.out.println(task.getTitle() + ": " + task.getStatus());
