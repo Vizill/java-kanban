@@ -40,6 +40,8 @@ public class Main {
         }
 
         inMemoryTaskManager.getEpicById(4);
+        inMemoryTaskManager.getTaskById(1);
+        inMemoryTaskManager.getTaskById(2);
 
         inMemoryTaskManager.deleteTask(5);
 
@@ -81,5 +83,7 @@ public class Main {
         for (Epic epic : inMemoryTaskManager.getAllEpics()) {
             System.out.println(epic.getTitle() + ": " + epic.getStatus());
         }
+
+        System.out.println("История:" + inMemoryTaskManager.getHistory());
     }
 }
