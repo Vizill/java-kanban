@@ -7,15 +7,18 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicHash;
     private HashMap<Integer, Subtask> subtaskHash;
     private int idCount;
-    private List<Task> viewedTasks;
+    private HistoryManager historyManager;
 
+    public InMemoryTaskManager(HistoryManager historyManager) {
+        this();
+        this.historyManager = historyManager;
+    }
 
     public InMemoryTaskManager() {
         this.taskHash = new HashMap<>();
         this.epicHash = new HashMap<>();
         this.subtaskHash = new HashMap<>();
         this.idCount = 1;
-        viewedTasks = new ArrayList<>();
     }
 
     @Override
@@ -40,7 +43,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Задача с ID " + taskId + " не найдена.");
         }
-        updateViewedTasks(task);
+        historyManager.add(task);
         return task;
     }
 
@@ -89,7 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Эпик с ID " + epicId + " не найдена.");
         }
-        updateViewedTasks(epic);
+        historyManager.add(epic);
         return epic;
     }
 
@@ -158,7 +161,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Эпик с ID " + subtaskId + " не найдена.");
         }
-        updateViewedTasks(subtask);
+        historyManager.add(subtask);
         return subtask;
     }
 
@@ -241,15 +244,4 @@ public class InMemoryTaskManager implements TaskManager {
         subtaskHash.clear();
     }
 
-    private void updateViewedTasks(Task task) {
-        viewedTasks.add(task);
-        if (viewedTasks.size() > 10) {
-            viewedTasks.remove(0);
-        }
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return  viewedTasks;
-    }
 }

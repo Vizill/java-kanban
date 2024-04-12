@@ -1,7 +1,8 @@
 public class Main {
 
     public static void main(String[] args) {
-        InMemoryTaskManager inMemoryTaskManager = new InMemoryTaskManager();
+        HistoryManager historyManager = Manager.getDefaultHistoryManager();
+        TaskManager inMemoryTaskManager = Manager.getDefaultTaskManager();
 
         Task task1 = new Task("Задача 1", "Описание задачи 1");
         Task task2 = new Task("Задача 2", "Описание задачи 2");
@@ -84,6 +85,6 @@ public class Main {
             System.out.println(epic.getTitle() + ": " + epic.getStatus());
         }
 
-        System.out.println("История:" + inMemoryTaskManager.getHistory());
+        System.out.println("История:" + historyManager.getHistory());
     }
 }
