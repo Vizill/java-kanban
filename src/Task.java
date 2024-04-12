@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Task {
     private String title;
     private String description;
@@ -41,4 +43,13 @@ public class Task {
     public void setStatus(TaskStatus status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id;
+    }
+
 }

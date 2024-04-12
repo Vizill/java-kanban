@@ -1,7 +1,6 @@
 public class Main {
 
     public static void main(String[] args) {
-        HistoryManager historyManager = Manager.getDefaultHistoryManager();
         TaskManager inMemoryTaskManager = Manager.getDefaultTaskManager();
 
         Task task1 = new Task("Задача 1", "Описание задачи 1");
@@ -16,6 +15,9 @@ public class Main {
         inMemoryTaskManager.addEpic(epic1);
         inMemoryTaskManager.addEpic(epic2);
 
+        inMemoryTaskManager.getEpicById(4);
+        inMemoryTaskManager.getTaskById(1);
+        inMemoryTaskManager.getTaskById(2);
 
         Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", 3);
         Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", 3);
@@ -40,9 +42,8 @@ public class Main {
             System.out.println(subtask.getTitle() + ": " + subtask.getStatus());
         }
 
-        inMemoryTaskManager.getEpicById(4);
-        inMemoryTaskManager.getTaskById(1);
-        inMemoryTaskManager.getTaskById(2);
+
+
 
         inMemoryTaskManager.deleteTask(5);
 
@@ -85,6 +86,6 @@ public class Main {
             System.out.println(epic.getTitle() + ": " + epic.getStatus());
         }
 
-        System.out.println("История:" + historyManager.getHistory());
+        System.out.println("История:" + inMemoryTaskManager.viewHistory());
     }
 }

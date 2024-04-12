@@ -25,6 +25,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTask(Task task) {
         task.setId(getNextId());
         taskHash.put(task.getId(), task);
+        historyManager.add(task);
     }
 
     @Override
@@ -36,6 +37,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Task getTaskById(int taskId) {
         Task task = taskHash.get(taskId);
         if (task != null) {
+            historyManager.add(task);
             System.out.println("ID: " + task.getId());
             System.out.println("Название: " + task.getTitle());
             System.out.println("Описание: " + task.getDescription());
@@ -43,7 +45,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Задача с ID " + taskId + " не найдена.");
         }
-        historyManager.add(task);
         return task;
     }
 
@@ -85,6 +86,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Epic getEpicById(int epicId) {
         Epic epic = epicHash.get(epicId);
         if (epic != null) {
+            historyManager.add(epic);
             System.out.println("ID: " + epic.getId());
             System.out.println("Название: " + epic.getTitle());
             System.out.println("Описание: " + epic.getDescription());
@@ -92,7 +94,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Эпик с ID " + epicId + " не найдена.");
         }
-        historyManager.add(epic);
         return epic;
     }
 
@@ -129,9 +130,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubtask(Subtask subtask) {
-        subtask.setId(getNextId());
-        subtaskHash.put(subtask.getId(), subtask);
-        updateEpicStatus(subtask.getParentEpic());
+        if (subtask.getParentEpic() != subtask.getId()) {
+            subtask.setId(getNextId());
+            subtaskHash.put(subtask.getId(), subtask);
+            updateEpicStatus(subtask.getParentEpic());
+        } else {
+            System.out.println("Ошибка");
+        }
     }
 
     @Override
@@ -242,6 +247,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllSubtasks() {
         subtaskHash.clear();
+    }
+
+    @Override
+    public List<Task> viewHistory() {
+        return historyManager.getHistory();
     }
 
 }

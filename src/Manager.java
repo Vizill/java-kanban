@@ -1,6 +1,6 @@
 public class Manager {
     public static HistoryManager getDefaultHistoryManager() {
-        return new InMemoryHistoryManager(); // Используем конструктор без аргументов
+        return new InMemoryHistoryManager();
     }
 
     public static TaskManager getDefaultTaskManager() {

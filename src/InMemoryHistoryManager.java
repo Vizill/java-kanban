@@ -5,7 +5,7 @@ class InMemoryHistoryManager implements HistoryManager {
     private List<Task> history;
 
     public InMemoryHistoryManager() {
-        this(new ArrayList<>()); // Используем конструктор с пустым списком задач
+        this(new ArrayList<>());
     }
 
     public InMemoryHistoryManager(List<Task> history) {
