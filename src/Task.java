@@ -1,10 +1,10 @@
 import java.util.Objects;
 
 public class Task {
-    private String title;
-    private String description;
-    private int id;
-    private TaskStatus status;
+    protected String title;
+    protected String description;
+    protected int id;
+    protected TaskStatus status;
 
     Task(String title, String description) {
         this.title = title;

@@ -5,11 +5,7 @@ class InMemoryHistoryManager implements HistoryManager {
     private List<Task> history;
 
     public InMemoryHistoryManager() {
-        this(new ArrayList<>());
-    }
-
-    public InMemoryHistoryManager(List<Task> history) {
-        this.history = history;
+        this.history = new ArrayList<>();
     }
 
     @Override

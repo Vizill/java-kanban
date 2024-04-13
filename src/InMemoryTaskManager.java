@@ -1,11 +1,12 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private HashMap<Integer, Task> taskHash;
-    private HashMap<Integer, Epic> epicHash;
-    private HashMap<Integer, Subtask> subtaskHash;
+    private Map<Integer, Task> taskHash;
+    private Map<Integer, Epic> epicHash;
+    private Map<Integer, Subtask> subtaskHash;
     private int idCount;
     private HistoryManager historyManager;
 
@@ -25,7 +26,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTask(Task task) {
         task.setId(getNextId());
         taskHash.put(task.getId(), task);
-        historyManager.add(task);
     }
 
     @Override
@@ -159,6 +159,7 @@ public class InMemoryTaskManager implements TaskManager {
     public Subtask getSubtaskById(int subtaskId) {
         Subtask subtask = subtaskHash.get(subtaskId);
         if (subtask != null) {
+            historyManager.add(subtask);
             System.out.println("ID: " + subtask.getId());
             System.out.println("Название: " + subtask.getTitle());
             System.out.println("Описание: " + subtask.getDescription());
@@ -166,7 +167,6 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Эпик с ID " + subtaskId + " не найдена.");
         }
-        historyManager.add(subtask);
         return subtask;
     }
 
