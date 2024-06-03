@@ -1,8 +1,4 @@
-
-
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class MainTest {
@@ -13,20 +9,20 @@ class MainTest {
         Task task2 = new Task("Task 2", "Description 2");
         task1.setId(1);
         task2.setId(1);
-        Assertions.assertEquals(task1, task2);
+        assertEquals(task1, task2);
     }
 
     @Test
     public void testTaskSubclassEqualityById() {
         Subtask subtask1 = new Subtask("Subtask 1", "Description 1", 1);
         Subtask subtask2 = new Subtask("Subtask 2", "Description 2", 1);
-        Assertions.assertEquals(subtask1, subtask2);
+        assertEquals(subtask1, subtask2);
 
         Epic epic1 = new Epic("Epic 1", "Description 1");
         Epic epic2 = new Epic("Epic 2", "Description 2");
         epic1.setId(1);
         epic2.setId(1);
-        Assertions.assertEquals(epic1, epic2);
+        assertEquals(epic1, epic2);
     }
 
     @Test
@@ -35,7 +31,7 @@ class MainTest {
         Subtask subtask = new Subtask("Subtask 1", "Description 1", 1);
         inMemoryTaskManager.addSubtask(subtask);
 
-        Assertions.assertEquals(1, subtask.getParentEpic());
+        assertEquals(1, subtask.getParentEpic());
     }
 
     @Test
@@ -59,8 +55,8 @@ class MainTest {
         taskManager.createTask(task1);
         taskManager.createTask(task2);
 
-        Assertions.assertEquals(task1, taskManager.getTaskById(task1.getId()));
-        Assertions.assertEquals(task2, taskManager.getTaskById(task2.getId()));
+        assertEquals(task1, taskManager.getTaskById(task1.getId()));
+        assertEquals(task2, taskManager.getTaskById(task2.getId()));
     }
 
     @Test
@@ -73,7 +69,7 @@ class MainTest {
         Task task2 = new Task("Task 2", "Description 2");
         taskManager.createTask(task2);
 
-        Assertions.assertEquals(2, taskManager.getAllTasks().size());
+        assertEquals(2, taskManager.getAllTasks().size());
     }
 
     @Test
@@ -81,7 +77,7 @@ class MainTest {
         HistoryManager historyManager = Manager.getDefaultHistoryManager();
         Task task = new Task("Task", "Description");
         historyManager.add(task);
-        Assertions.assertEquals(1, historyManager.getHistory().size());
+        assertEquals(1, historyManager.getHistory().size());
     }
 
 }
