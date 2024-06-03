@@ -51,13 +51,4 @@ public class Task {
         return id == task.id;
     }
 
-    @Override
-    public String toString() {
-        return "Task{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                '}';
-    }
 }
