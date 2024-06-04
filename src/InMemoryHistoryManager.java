@@ -11,10 +11,6 @@ class InMemoryHistoryManager implements HistoryManager {
             return;
         }
 
-        if (nodesMap.containsKey(task.getId())) {
-            removeNode(nodesMap.get(task.getId()));
-        }
-
         linkLast(task);
     }
 
