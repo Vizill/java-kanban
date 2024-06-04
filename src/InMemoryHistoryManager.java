@@ -10,7 +10,6 @@ class InMemoryHistoryManager implements HistoryManager {
         if (task == null) {
             return;
         }
-
         linkLast(task);
     }
 
