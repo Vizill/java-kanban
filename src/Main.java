@@ -31,5 +31,6 @@ public class Main {
         for (Task task : historyManager.getHistory()) {
             System.out.println(task);
         }
+        System.out.println("Успех");
     }
 }
