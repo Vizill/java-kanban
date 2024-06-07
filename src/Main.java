@@ -32,5 +32,7 @@ public class Main {
             System.out.println(task);
         }
         System.out.println("Успех");
+        System.out.println("Успех");
+        System.out.println("Успех");
     }
 }
