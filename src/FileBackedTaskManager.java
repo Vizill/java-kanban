@@ -1,17 +1,19 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File file;
 
     public FileBackedTaskManager(File file) {
-        super();
         this.file = file;
-        loadTasksFromFile();
     }
 
-    public void loadTasksFromFile() {
+    public static FileBackedTaskManager loadFromFile(File file) {
+        FileBackedTaskManager manager = new FileBackedTaskManager(file);
+        manager.loadTasksFromFile();
+        return manager;
+    }
+
+    public void loadTasksFromFile() throws LoadException {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {
@@ -24,14 +26,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     super.createTask(task);
                 }
             }
+        } catch (FileNotFoundException e) {
+            throw new LoadException("Файл не найден: " + file.getAbsolutePath(), e);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new LoadException("Ошибка ввода-вывода при чтении файла: " + file.getAbsolutePath(), e);
+        } catch (Exception e) {
+            throw new LoadException("Ошибка при загрузке задач: " + e.getMessage(), e);
         }
     }
 
-    public void save() {
+    private void save() throws SaveException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,epic");
+            writer.newLine();
             for (Task task : getAllTasks()) {
                 writer.write(toString(task));
                 writer.newLine();
@@ -45,11 +52,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 writer.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new SaveException("Ошибка ввода-вывода при записи файла: " + file.getAbsolutePath(), e);
+        } catch (Exception e) {
+            throw new SaveException("Ошибка при сохранении задач: " + e.getMessage(), e);
         }
     }
 
-    public String toString(Task task) {
+    private String toString(Task task) {
         StringBuilder sb = new StringBuilder();
         sb.append(task.getId()).append(",");
         sb.append(task.getType()).append(",");
@@ -63,7 +72,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return sb.toString();
     }
 
-    public Task fromString(String value) {
+    private Task fromString(String value) {
         String[] fields = value.split(",");
         int id = Integer.parseInt(fields[0]);
         Type type = Type.valueOf(fields[1]);
@@ -106,16 +115,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() {
-        return super.getAllTasks();
-    }
-
-    @Override
-    public Task getTaskById(int taskId) {
-        return super.getTaskById(taskId);
-    }
-
-    @Override
     public void deleteTask(int taskId) {
         super.deleteTask(taskId);
         save();
@@ -125,16 +124,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void addEpic(Epic epic) {
         super.addEpic(epic);
         save();
-    }
-
-    @Override
-    public ArrayList<Epic> getAllEpics() {
-        return super.getAllEpics();
-    }
-
-    @Override
-    public Epic getEpicById(int epicId) {
-        return super.getEpicById(epicId);
     }
 
     @Override
@@ -153,21 +142,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void addSubtask(Subtask subtask) {
         super.addSubtask(subtask);
         save();
-    }
-
-    @Override
-    public ArrayList<Subtask> getAllSubtasks() {
-        return super.getAllSubtasks();
-    }
-
-    @Override
-    public ArrayList<Subtask> getAllSubtasksOfEpic(int epicId) {
-        return super.getAllSubtasksOfEpic(epicId);
-    }
-
-    @Override
-    public Subtask getSubtaskById(int subtaskId) {
-        return super.getSubtaskById(subtaskId);
     }
 
     @Override
@@ -198,10 +172,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteAllSubtasks() {
         super.deleteAllSubtasks();
         save();
-    }
-
-    @Override
-    public List<Task> viewHistory() {
-        return super.viewHistory();
     }
 }
