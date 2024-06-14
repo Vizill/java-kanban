@@ -2,26 +2,26 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Subtask extends Task {
-    private int ParentEpic;
+    private int parentEpic;
 
     public Subtask(String title, String description, int parentEpic) {
         super(title, description);
-        this.ParentEpic = parentEpic;
+        this.parentEpic = parentEpic;
         this.type = Type.SUBTASK;
     }
 
-    public Subtask(String title, String description, int ParentEpic, Duration duration, LocalDateTime startTime) {
+    public Subtask(String title, String description, int parentEpic, Duration duration, LocalDateTime startTime) {
         super(title, description, duration, startTime);
-        this.ParentEpic = ParentEpic;
+        this.parentEpic = parentEpic;
         this.type = Type.SUBTASK;
     }
 
     public int getParentEpic() {
-        return ParentEpic;
+        return parentEpic;
     }
 
-    public void setParentEpic(int ParentEpic) {
-        this.ParentEpic = ParentEpic;
+    public void setParentEpic(int parentEpic) {
+        this.parentEpic = parentEpic;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class Subtask extends Task {
                 ", type=" + type +
                 ", duration=" + duration +
                 ", startTime=" + startTime +
-                ", ParentEpic=" + ParentEpic +
+                ", parentEpic=" + parentEpic +
                 '}';
     }
 }
