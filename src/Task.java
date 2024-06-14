@@ -1,15 +1,15 @@
-import java.util.Objects;
-
 public class Task {
     protected String title;
     protected String description;
     protected int id;
     protected TaskStatus status;
+    protected Type type;
 
     Task(String title, String description) {
         this.title = title;
         this.description = description;
         this.status = TaskStatus.NEW;
+        this.type = Type.TASK;
     }
 
     public String getTitle() {
@@ -42,6 +42,10 @@ public class Task {
 
     public void setStatus(TaskStatus status) {
         this.status = status;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     @Override
