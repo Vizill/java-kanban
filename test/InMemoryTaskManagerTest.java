@@ -6,11 +6,13 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+public class InMemoryTaskManagerTest {
 
-    @Override
-    protected InMemoryTaskManager createTaskManager() {
-        return new InMemoryTaskManager(new InMemoryHistoryManager());
+    private InMemoryTaskManager taskManager;
+
+    @BeforeEach
+    void setUp() {
+        taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
     }
 
 
@@ -24,7 +26,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         epic2.setDuration(Duration.ofHours(3));
 
         taskManager.addEpic(epic1);
-        assertTrue(taskManager.validateEpicTime(epic2));
+        assertTrue(taskManager.validateTaskTime(epic2));
     }
 
     @Test
@@ -37,7 +39,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         epic2.setDuration(Duration.ofHours(2));
 
         taskManager.addEpic(epic1);
-        boolean isValid = taskManager.validateEpicTime(epic2);
+        boolean isValid = taskManager.validateTaskTime(epic2);
 
         assertTrue(isValid);
     }

@@ -1,22 +1,9 @@
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
     protected T taskManager;
-
-    protected abstract T createTaskManager();
-
-    @BeforeEach
-    void setUp() {
-        taskManager = createTaskManager();
-    }
-
-    @AfterEach
-    void tearDown() {
-        taskManager = null;
-    }
 
     @Test
     void testCreateAndGetTask() {
@@ -50,4 +37,4 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Task retrievedTask = taskManager.getTaskById(task.getId());
         assertNull(retrievedTask);
     }
-    }
+}

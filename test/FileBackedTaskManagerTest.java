@@ -5,20 +5,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>  {
 
     private static final String TEST_FILE_PATH = "test_tasks.json";
     private FileBackedTaskManager taskManager;
 
     @BeforeEach
     void setUp() throws IOException {
-        // Create a temporary file for testing
         Files.deleteIfExists(Paths.get(TEST_FILE_PATH));
         File testFile = new File(TEST_FILE_PATH);
         taskManager = new FileBackedTaskManager(testFile);
@@ -26,7 +21,6 @@ public class FileBackedTaskManagerTest {
 
     @AfterEach
     void tearDown() {
-        // Clean up the test file after each test
         File testFile = new File(TEST_FILE_PATH);
         if (testFile.exists()) {
             testFile.delete();

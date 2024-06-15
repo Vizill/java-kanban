@@ -11,13 +11,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws LoadException {
+    public static FileBackedTaskManager loadFromFile(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
         manager.loadTasksFromFile();
         return manager;
     }
 
-    public void loadTasksFromFile() throws LoadException {
+    public void loadTasksFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             while ((line = reader.readLine()) != null) {

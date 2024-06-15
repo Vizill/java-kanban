@@ -29,7 +29,7 @@ public class Epic extends Task {
         updateEpicTimes();
     }
 
-    private void updateEpicTimes() {
+    public void updateEpicTimes() {
         if (subtasks.isEmpty()) {
             this.duration = Duration.ZERO;
             this.startTime = null;

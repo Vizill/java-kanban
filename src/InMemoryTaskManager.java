@@ -53,14 +53,18 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         Task existingTask = taskHash.get(task.getId());
-        if (existingTask != null) {
-            if (existingTask.getStartTime() != null) {
-                prioritizedTasks.remove(existingTask);
+        if (validateTaskTime(task)) {
+            if (existingTask != null) {
+                if (existingTask.getStartTime() != null) {
+                    prioritizedTasks.remove(existingTask);
+                }
+                taskHash.put(task.getId(), task);
+                if (task.getStartTime() != null) {
+                    prioritizedTasks.add(task);
+                }
             }
-            taskHash.put(task.getId(), task);
-            if (task.getStartTime() != null) {
-                prioritizedTasks.add(task);
-            }
+        } else {
+            System.out.println("Ошибка: задача пересекается по времени с другой задачей.");
         }
     }
 
@@ -74,7 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addEpic(Epic epic) {
-        if (validateEpicTime(epic)) {
+        if (validateTaskTime(epic)) {
             epic.setId(getNextId());
             epicHash.put(epic.getId(), epic);
         } else {
@@ -122,7 +126,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void addSubtask(Subtask subtask) {
-        if (validateSubtaskTime(subtask)) {
+        if (validateTaskTime(subtask)) {
             if (subtask.getParentEpic() != subtask.getId()) {
                 subtask.setId(getNextId());
                 subtaskHash.put(subtask.getId(), subtask);
@@ -163,15 +167,19 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         Subtask existingSubtask = subtaskHash.get(subtask.getId());
-        if (existingSubtask != null) {
-            if (existingSubtask.getStartTime() != null) {
-                prioritizedTasks.remove(existingSubtask);
+        if (validateTaskTime(subtask)) {
+            if (existingSubtask != null) {
+                if (existingSubtask.getStartTime() != null) {
+                    prioritizedTasks.remove(existingSubtask);
+                }
+                subtaskHash.put(subtask.getId(), subtask);
+                if (subtask.getStartTime() != null) {
+                    prioritizedTasks.add(subtask);
+                }
+                updateEpicStatus(subtask.getParentEpic());
             }
-            subtaskHash.put(subtask.getId(), subtask);
-            if (subtask.getStartTime() != null) {
-                prioritizedTasks.add(subtask);
-            }
-            updateEpicStatus(subtask.getParentEpic());
+        } else {
+            System.out.println("Ошибка: подзадача пересекается по времени с другой задачей.");
         }
     }
 
@@ -190,7 +198,7 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epicHash.get(epicId);
         if (epic != null) {
             calculateEpicStatus(epic);
-            updateEpicTimes(epic);
+            epic.updateEpicTimes();
         }
     }
 
@@ -220,27 +228,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private void updateEpicTimes(Epic epic) {
-        LocalDateTime startTime = null;
-        LocalDateTime endTime = null;
-        Duration duration = Duration.ZERO;
-
-        for (Subtask subtask : getAllSubtasksOfEpic(epic.getId())) {
-            if (subtask.getStartTime() != null) {
-                if (startTime == null || subtask.getStartTime().isBefore(startTime)) {
-                    startTime = subtask.getStartTime();
-                }
-                LocalDateTime subtaskEndTime = subtask.getEndTime();
-                if (subtaskEndTime != null && (endTime == null || subtaskEndTime.isAfter(endTime))) {
-                    endTime = subtaskEndTime;
-                }
-                duration = duration.plus(subtask.getDuration());
-            }
-        }
-
-        epic.setStartTime(startTime);
-        epic.setDuration(duration);
-    }
 
     private int getNextId() {
         return idCount++;
@@ -282,50 +269,11 @@ public class InMemoryTaskManager implements TaskManager {
         LocalDateTime newStart = newTask.getStartTime();
         Duration newDuration = newTask.getDuration();
 
-        // Проверяем, нет ли пересечений с существующими задачами
-        return taskHash.values().stream()
+        return prioritizedTasks.stream()
                 .noneMatch(task -> {
                     LocalDateTime existingStart = task.getStartTime();
                     Duration existingDuration = task.getDuration();
-                    return Cross.doTasksOverlap(newStart, newDuration, existingStart, existingDuration);
+                    return CheckTasksOverlap.doTasksOverlap(newStart, newDuration, existingStart, existingDuration);
                 });
-    }
-
-    protected boolean validateSubtaskTime(Subtask newSubtask) {
-        LocalDateTime newStart = newSubtask.getStartTime();
-        Duration newDuration = newSubtask.getDuration();
-
-        // Проверяем, нет ли пересечений с существующими задачами и подзадачами
-        return taskHash.values().stream()
-                .noneMatch(task -> {
-                    LocalDateTime existingStart = task.getStartTime();
-                    Duration existingDuration = task.getDuration();
-                    return Cross.doTasksOverlap(newStart, newDuration, existingStart, existingDuration);
-                }) &&
-                subtaskHash.values().stream()
-                        .noneMatch(subtask -> {
-                            LocalDateTime existingStart = subtask.getStartTime();
-                            Duration existingDuration = subtask.getDuration();
-                            return Cross.doTasksOverlap(newStart, newDuration, existingStart, existingDuration);
-                        });
-    }
-
-    protected boolean validateEpicTime(Epic newEpic) {
-        LocalDateTime newStart = newEpic.getStartTime();
-        Duration newDuration = newEpic.getDuration();
-
-        // Проверяем, нет ли пересечений с существующими задачами и эпиками
-        return taskHash.values().stream()
-                .noneMatch(task -> {
-                    LocalDateTime existingStart = task.getStartTime();
-                    Duration existingDuration = task.getDuration();
-                    return Cross.doTasksOverlap(newStart, newDuration, existingStart, existingDuration);
-                }) &&
-                epicHash.values().stream()
-                        .noneMatch(epic -> {
-                            LocalDateTime existingStart = epic.getStartTime();
-                            Duration existingDuration = epic.getDuration();
-                            return Cross.doTasksOverlap(newStart, newDuration, existingStart, existingDuration);
-                        });
     }
 }
