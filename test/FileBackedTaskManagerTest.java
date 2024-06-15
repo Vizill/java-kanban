@@ -7,7 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager>  {
+public class FileBackedTaskManagerTest {
 
     private static final String TEST_FILE_PATH = "test_tasks.json";
     private FileBackedTaskManager taskManager;
