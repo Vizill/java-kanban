@@ -7,16 +7,18 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTaskManagerTest {
+public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
     private static final String TEST_FILE_PATH = "test_tasks.json";
-    private FileBackedTaskManager taskManager;
+    @Override
+    protected FileBackedTaskManager createTaskManager() {
+        return new FileBackedTaskManager(new File(TEST_FILE_PATH));
+    }
 
     @BeforeEach
     void setUp() throws IOException {
         Files.deleteIfExists(Paths.get(TEST_FILE_PATH));
-        File testFile = new File(TEST_FILE_PATH);
-        taskManager = new FileBackedTaskManager(testFile);
+        taskManager = createTaskManager();
     }
 
     @AfterEach

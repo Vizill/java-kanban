@@ -20,6 +20,7 @@ public class InMemoryTaskManager implements TaskManager {
         this.epicHash = new HashMap<>();
         this.subtaskHash = new HashMap<>();
         this.idCount = 1;
+        this.historyManager = new InMemoryHistoryManager();
         this.prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime, Comparator.nullsLast(LocalDateTime::compareTo)));
     }
 

@@ -6,15 +6,17 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class InMemoryTaskManagerTest {
+public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
-    private InMemoryTaskManager taskManager;
+    @Override
+    protected InMemoryTaskManager createTaskManager() {
+        return new InMemoryTaskManager(new InMemoryHistoryManager());
+    }
 
     @BeforeEach
     void setUp() {
-        taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
+        taskManager = createTaskManager();
     }
-
 
     @Test
     void testValidateEpicTime_NoOverlap() {
