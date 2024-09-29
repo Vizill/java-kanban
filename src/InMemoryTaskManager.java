@@ -25,7 +25,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public void createTask(Task task) throws InvalidTaskException {
+        // Пример проверки на пересечение
+        for (Task existingTask : getAllTasks()) {
+            if (task.getStartTime().isBefore(existingTask.getEndTime()) &&
+                    existingTask.getStartTime().isBefore(task.getEndTime())) {
+                throw new InvalidTaskException("Задача пересекается по времени с другой задачей.");
+            }
+        }
         if (validateTaskTime(task)) {
             task.setId(getNextId());
             taskHash.put(task.getId(), task);
