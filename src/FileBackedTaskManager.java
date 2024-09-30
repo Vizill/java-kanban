@@ -39,7 +39,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    protected void save() throws SaveException {
+    private void save() throws SaveException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("id,type,name,status,description,duration,startTime,epicId");
             writer.newLine();
@@ -62,7 +62,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    protected String toString(Task task) {
+    private String toString(Task task) {
         StringBuilder sb = new StringBuilder();
         sb.append(task.getId()).append(",");
         sb.append(task.getType()).append(",");
@@ -79,7 +79,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return sb.toString();
     }
 
-    protected Task fromString(String value) {
+    private Task fromString(String value) {
         String[] fields = value.split(",");
         int id = Integer.parseInt(fields[0]);
         Type type = Type.valueOf(fields[1]);

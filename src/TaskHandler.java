@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
-    private final Gson gson = new Gson();
+    private final Gson gson = HttpTaskServer.getGson();
 
     public TaskHandler(TaskManager taskManager) {
         this.taskManager = taskManager;

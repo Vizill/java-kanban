@@ -9,7 +9,7 @@ import java.util.List;
 
 public class EpicHandler extends BaseHttpHandler implements HttpHandler {
     private final TaskManager taskManager;
-    private final Gson gson = new Gson();
+    private final Gson gson = HttpTaskServer.getGson();
 
     public EpicHandler(TaskManager taskManager) {
         this.taskManager = taskManager;
